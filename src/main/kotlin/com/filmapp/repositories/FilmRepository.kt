@@ -277,4 +277,33 @@ class FilmRepository(private val dataSource: HikariDataSource) {
             }
         }
     }
+
+    fun getRandom(genreId: Int? = null, userId: Int? = null): FilmResponse? {
+        dataSource.connection.use { conn ->
+            val sql = if (genreId != null) {
+                """
+                SELECT f.*, g.name as genre_name 
+                FROM films f 
+                LEFT JOIN genres g ON f.genre_id = g.id 
+                WHERE f.genre_id = ? 
+                ORDER BY RANDOM() 
+                LIMIT 1
+            """
+            } else {
+                """
+                SELECT f.*, g.name as genre_name 
+                FROM films f 
+                LEFT JOIN genres g ON f.genre_id = g.id 
+                ORDER BY RANDOM() 
+                LIMIT 1
+            """
+            }
+
+            val stmt = conn.prepareStatement(sql)
+            if (genreId != null) stmt.setInt(1, genreId)
+            val rs = stmt.executeQuery()
+            if (rs.next()) return mapFilm(rs, userId)
+        }
+        return null
+    }
 }

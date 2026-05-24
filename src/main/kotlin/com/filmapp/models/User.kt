@@ -9,7 +9,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 object Users : IntIdTable("users") {
     val email = varchar("email", 255).uniqueIndex()
     val passwordHash = varchar("password_hash", 255)
-    val username = varchar("username", 100)
+    val name = varchar("name", 100)  // ← name, не username
     val createdAt = datetime("created_at")
 }
 
@@ -17,6 +17,6 @@ class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
     var email by Users.email
     var passwordHash by Users.passwordHash
-    var username by Users.username
+    var name by Users.name  // ← name
     var createdAt by Users.createdAt
 }

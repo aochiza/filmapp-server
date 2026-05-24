@@ -42,6 +42,19 @@ fun Route.filmRoutes(filmRepository: FilmRepository) {
             call.respond(film)
         }
 
+        // Случайный фильм (без авторизации)
+        get("/random") {
+            val genreId = call.request.queryParameters["genreId"]?.toIntOrNull()
+            val userId = runCatching { call.getUserId() }.getOrNull()
+
+            val film = filmRepository.getRandom(genreId, userId)
+            if (film != null) {
+                call.respond(film)
+            } else {
+                call.respond(HttpStatusCode.NotFound, ErrorResponse("No films found"))
+            }
+        }
+
         authenticate("auth-jwt") {
 
             post {

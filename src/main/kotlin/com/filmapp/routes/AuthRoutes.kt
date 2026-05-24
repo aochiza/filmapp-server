@@ -24,7 +24,7 @@ fun Route.authRoutes(userRepository: UserRepository) {
         post("/register") {
             val request = call.receive<RegisterRequest>()
 
-            if (request.email.isBlank() || request.password.isBlank() || request.username.isBlank()) {
+            if (request.email.isBlank() || request.password.isBlank() || request.name.isBlank()) {
                 call.respond(HttpStatusCode.BadRequest, ErrorResponse("All fields are required"))
                 return@post
             }
@@ -35,7 +35,7 @@ fun Route.authRoutes(userRepository: UserRepository) {
             }
 
             val passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt())
-            val user = userRepository.create(request.email, passwordHash, request.username)
+            val user = userRepository.create(request.email, passwordHash, request.name)
 
             val token = JWT.create()
                 .withAudience(audience)
@@ -48,7 +48,7 @@ fun Route.authRoutes(userRepository: UserRepository) {
             call.respond(HttpStatusCode.Created, AuthResponse(
                 token = token,
                 userId = user.id,
-                username = user.username,
+                name = user.name,
                 email = user.email
             ))
         }
@@ -78,7 +78,7 @@ fun Route.authRoutes(userRepository: UserRepository) {
             call.respond(AuthResponse(
                 token = token,
                 userId = user.id,
-                username = user.username,
+                name = user.name,
                 email = user.email
             ))
         }
