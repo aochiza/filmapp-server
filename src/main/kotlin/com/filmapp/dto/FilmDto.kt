@@ -16,7 +16,7 @@ data class FilmResponse(
     val director: String?,
     val duration: Int?,
     val isFavorite: Boolean = false,
-    val isWatchLater: Boolean = false  // ← добавить
+    val isWatchLater: Boolean = false
 )
 
 @Serializable

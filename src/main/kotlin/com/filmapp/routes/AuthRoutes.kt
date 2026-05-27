@@ -42,15 +42,20 @@ fun Route.authRoutes(userRepository: UserRepository) {
                 .withIssuer(issuer)
                 .withClaim("userId", user.id)
                 .withClaim("email", user.email)
+                .withClaim("role", user.role)
                 .withExpiresAt(Date(System.currentTimeMillis() + expirationMs))
                 .sign(Algorithm.HMAC256(secret))
 
-            call.respond(HttpStatusCode.Created, AuthResponse(
-                token = token,
-                userId = user.id,
-                name = user.name,
-                email = user.email
-            ))
+            call.respond(
+                HttpStatusCode.Created,
+                AuthResponse(
+                    token = token,
+                    userId = user.id,
+                    name = user.name,
+                    email = user.email,
+                    role = user.role
+                )
+            )
         }
 
         post("/login") {
@@ -72,15 +77,19 @@ fun Route.authRoutes(userRepository: UserRepository) {
                 .withIssuer(issuer)
                 .withClaim("userId", user.id)
                 .withClaim("email", user.email)
+                .withClaim("role", user.role)
                 .withExpiresAt(Date(System.currentTimeMillis() + expirationMs))
                 .sign(Algorithm.HMAC256(secret))
 
-            call.respond(AuthResponse(
-                token = token,
-                userId = user.id,
-                name = user.name,
-                email = user.email
-            ))
+            call.respond(
+                AuthResponse(
+                    token = token,
+                    userId = user.id,
+                    name = user.name,
+                    email = user.email,
+                    role = user.role
+                )
+            )
         }
     }
 }

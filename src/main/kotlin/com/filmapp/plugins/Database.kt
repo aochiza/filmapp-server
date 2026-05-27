@@ -34,5 +34,5 @@ fun Application.configureDatabase() {
 
     Database.connect(dataSource)
 
-    println("✅ Database connected successfully!")
+    println("Database connected successfully!")
 }

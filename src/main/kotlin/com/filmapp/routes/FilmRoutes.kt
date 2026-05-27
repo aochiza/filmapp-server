@@ -4,6 +4,7 @@ import com.filmapp.dto.ErrorResponse
 import com.filmapp.dto.FilmRequest
 import com.filmapp.dto.FilmsListResponse
 import com.filmapp.repositories.FilmRepository
+import com.filmapp.security.requireAdmin
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -58,12 +59,17 @@ fun Route.filmRoutes(filmRepository: FilmRepository) {
         authenticate("auth-jwt") {
 
             post {
+                if (!call.requireAdmin()) return@post
+
                 val request = call.receive<FilmRequest>()
                 val film = filmRepository.create(request)
+
                 call.respond(HttpStatusCode.Created, film)
             }
 
             put("/{id}") {
+                if (!call.requireAdmin()) return@put
+
                 val id = call.parameters["id"]?.toIntOrNull()
                     ?: return@put call.respond(HttpStatusCode.BadRequest, ErrorResponse("Invalid ID"))
 
@@ -75,6 +81,8 @@ fun Route.filmRoutes(filmRepository: FilmRepository) {
             }
 
             delete("/{id}") {
+                if (!call.requireAdmin()) return@delete
+
                 val id = call.parameters["id"]?.toIntOrNull()
                     ?: return@delete call.respond(HttpStatusCode.BadRequest, ErrorResponse("Invalid ID"))
 
