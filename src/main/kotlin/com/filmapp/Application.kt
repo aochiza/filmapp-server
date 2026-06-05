@@ -10,8 +10,8 @@ fun Application.module() {
     println("!!! APPLICATION MODULE IS RUNNING !!!")
     configureDatabase()
     configureSerialization()
-    configureSecurity()
-    configureStatusPages()
     configureCORS()
+    configureStatusPages()
+    configureSecurity()
     configureRouting()
 }

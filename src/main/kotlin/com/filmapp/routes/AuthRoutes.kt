@@ -35,6 +35,7 @@ fun Route.authRoutes(userRepository: UserRepository) {
             }
 
             val passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt())
+
             val user = userRepository.create(request.email, passwordHash, request.name)
 
             val token = JWT.create()

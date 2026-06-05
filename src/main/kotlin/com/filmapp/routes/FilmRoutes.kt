@@ -13,6 +13,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
+//id из токена
 fun ApplicationCall.getUserId(): Int {
     val principal = principal<JWTPrincipal>()
     return principal?.payload?.getClaim("userId")?.asInt()
@@ -30,6 +31,7 @@ fun Route.filmRoutes(filmRepository: FilmRepository) {
             val genreId = call.request.queryParameters["genreId"]?.toIntOrNull()
 
             val (films, total) = filmRepository.getAll(page, pageSize, search, genreId)
+
             call.respond(FilmsListResponse(films, total.toInt(), page, pageSize))
         }
 
@@ -43,7 +45,7 @@ fun Route.filmRoutes(filmRepository: FilmRepository) {
             call.respond(film)
         }
 
-        // Случайный фильм (без авторизации)
+
         get("/random") {
             val genreId = call.request.queryParameters["genreId"]?.toIntOrNull()
             val userId = runCatching { call.getUserId() }.getOrNull()
