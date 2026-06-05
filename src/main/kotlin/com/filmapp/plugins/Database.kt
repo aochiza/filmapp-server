@@ -30,7 +30,7 @@ fun Application.configureDatabase() {
         connectionTimeout = 30000
     }
 
-    dataSource = HikariDataSource(config)
+    dataSource = HikariDataSource(config)//созд пул соед
 
     Database.connect(dataSource)
 

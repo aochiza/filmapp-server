@@ -19,26 +19,3 @@ fun Application.configureSerialization() {
         })
     }
 }
-
-fun Application.configureCORS() {
-    install(CORS) {
-        anyHost()
-        allowHeader(HttpHeaders.ContentType)
-        allowHeader(HttpHeaders.Authorization)
-        allowMethod(HttpMethod.Options)
-        allowMethod(HttpMethod.Put)
-        allowMethod(HttpMethod.Delete)
-        allowMethod(HttpMethod.Patch)
-    }
-}
-
-fun Application.configureStatusPages() {
-    install(StatusPages) {
-        exception<Throwable> { call, cause ->
-            call.respond(
-                HttpStatusCode.InternalServerError,
-                ErrorResponse(cause.message ?: "Internal Server Error")
-            )
-        }
-    }
-}

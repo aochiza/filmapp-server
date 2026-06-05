@@ -15,13 +15,11 @@ import org.jetbrains.exposed.sql.selectAll
 fun Application.configureRouting() {
     println("=== ROUTING IS CALLED ===")
 
-    // Создаём репозитории (они используют dataSource из Database.kt)
     val userRepository = UserRepository(dataSource)
     val filmRepository = FilmRepository(dataSource)
     val genreRepository = GenreRepository(dataSource)
 
     routing {
-        // Базовые эндпоинты для проверки
         get("/health") {
             call.respondText("OK")
         }
@@ -41,7 +39,6 @@ fun Application.configureRouting() {
             }
         }
 
-        // API v1 роуты
         route("/api/v1") {
             authRoutes(userRepository)
             filmRoutes(filmRepository)
